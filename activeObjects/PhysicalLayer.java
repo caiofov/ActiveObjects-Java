@@ -1,14 +1,14 @@
 package activeObjects;
 
 public class PhysicalLayer {
-    private Frame content;
+    private Frame frame;
 
     public PhysicalLayer(){}
-    public void setContent(Frame content) {
-        this.content = content;
+    public void setFrame(Frame frame) {
+        this.frame = frame;
     }
-    public Frame getContent() {
-        return content;
+    public Frame getFrame() {
+        return frame;
     }
 
 }

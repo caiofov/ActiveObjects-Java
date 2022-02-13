@@ -1,8 +1,8 @@
 package activeObjects;
 
 public class SenderSW extends Thread{
-    Frame packet = new Frame(5, "data"); //pacote que será enviado
-    int packetCount = 0;
+    Frame frame = new Frame(5, "data"); //pacote que será enviado
+    int frameCount = 0;
     Boolean wait = false;
     ReceiverSW receiver;
     PhysicalLayer physicalLayer;
@@ -12,12 +12,12 @@ public class SenderSW extends Thread{
     public SenderSW(PhysicalLayer physicalLayer){
         this.physicalLayer = physicalLayer;
     }
-    public SenderSW(ReceiverSW receiver, Frame packet){
+    public SenderSW(ReceiverSW receiver, Frame frame){
         this.setReceiver(receiver);
-        this.fromNetworkLayer(packet);
+        this.fromNetworkLayer(frame);
     }
-    public void fromNetworkLayer(Frame packet) { //sets the packet
-        this.packet = packet;
+    public void fromNetworkLayer(Frame frame) { //sets the frame
+        this.frame = frame;
     }
     public void setReceiver(ReceiverSW receiver) {
         this.receiver = receiver;
@@ -26,27 +26,27 @@ public class SenderSW extends Thread{
     private void toPhysicalLayer() { //envia o quadro para a camada física
         
         int content = 1;
-        this.packet.setInfo(this.packet.getInfo()-1);
-        this.packetCount += 1;
+        this.frame.setInfo(this.frame.getInfo()-1);
+        this.frameCount += 1;
         
-        Frame senderPacket = new Frame(content, "data"); //quadro que será enviado
-        senderPacket.code = this.packetCount; //insere o código no quadro
+        Frame senderframe = new Frame(content, "data"); //quadro que será enviado
+        senderframe.code = this.frameCount; //insere o código no quadro
         
-        if(this.packet.getInfo() <= 0){senderPacket.last = true; } //verifica se é o último quadro a ser enviado
+        if(this.frame.getInfo() <= 0){senderframe.last = true; } //verifica se é o último quadro a ser enviado
         
-        System.out.println("Sender: Enviando...| Código: "+ senderPacket.code);
-        this.physicalLayer.setContent(senderPacket); //envia para a camada física
+        System.out.println("Sender: Enviando...| Código: "+ senderframe.code);
+        this.physicalLayer.setFrame(senderframe); //envia para a camada física
 
     }
 
     @Override
     public void run(){
         this.toPhysicalLayer();
-        while(this.packet.getInfo() > 0){
-            Frame content = this.physicalLayer.getContent(); //recebe o conteudo da camada física
-            if(!(content == null) && content.getKind() == "ack" && content.code == packetCount){ //se o pacote for de confirmação e for do quadro enviado por último
+        while(this.frame.getInfo() > 0){
+            Frame frame = this.physicalLayer.getFrame(); //recebe o conteudo da camada física
+            if(!(frame == null) && frame.getKind() == "ack" && frame.code == frameCount){ //se o pacote for de confirmação e for do quadro enviado por último
                 //envia um novo quadro para a camada física
-                System.out.println("Sender: Quadro de confirmação recebido | Código: "+ content.code);
+                System.out.println("Sender: Quadro de confirmação recebido | Código: "+ frame.code);
                 this.toPhysicalLayer();
                 
             }
@@ -59,13 +59,4 @@ public class SenderSW extends Thread{
             }
         }
     }
-
-    // private void sendPacket(){
-    //     System.out.println("Enviado");
-    //     this.packet -= 1;
-    //     this.receiver.receivePacket();
-    // }
-    // public void receiveWaitSignal(){
-    //     this.wait = false;
-    // }
 }   

@@ -15,7 +15,7 @@ public class ReceiverSW extends Thread{
         Frame ackFrame = new Frame(-111, "ack");
         ackFrame.code = packet.code; //seta o código do quadro de confirmação igual ao quadro recebido
         System.out.println("Receiver: Enviando quadro de confirmação | Código: "+ ackFrame.code);
-        this.physicalLayer.setContent(ackFrame);
+        this.physicalLayer.setFrame(ackFrame);
         
         return packet.last; //retornar se é o último quadro a ser lido
     }
@@ -24,7 +24,7 @@ public class ReceiverSW extends Thread{
     public void run(){
         while(true){
             System.out.println("Receiver: Lendo camada física");
-            Frame content = this.physicalLayer.getContent(); //recebe o conteudo da camada física
+            Frame content = this.physicalLayer.getFrame(); //recebe o conteudo da camada física
             if(content == null || content.kind == "ack"){ //se o conteúdo for nulo ou o quadro for de confirmação
                 System.out.println("Receiver: Esperando..."); //deverá esperar por um novo quadro
                 try {
