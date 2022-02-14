@@ -28,13 +28,18 @@ public class StopAndWait { //protocolo de enlace de dados Stop and Wait
 
     public void sendMessage(String message) throws InterruptedException{
         this.setSenderMessage(message);
+        
         System.out.println("Iniciando a transmissão de dados . . . ");
+        
         //inica as threads dos dois objetos ativos
         this.sender.start();
         this.receiver.start();
+        
         //programa só irá continuar depois que as duas threads acabarem
         this.sender.join();
         this.receiver.join();
+
+        System.out.println("Transmissão completa!");
     }
 
     private void setSenderMessage(String message){
