@@ -6,9 +6,9 @@ import activeObjects.*;
 public class Main {
 	public static void main(String[] args) throws InterruptedException {
         StopAndWait protocol = new StopAndWait();
-        protocol.sendMessage();
-        System.out.println("Acabouaa");
-
+        protocol.sendMessage("Oi, tudo bem?");
+        System.out.println("Acabou");
+        System.out.println("Mensagem recebida: " + protocol.receivedMessage());
     }
 
 }
