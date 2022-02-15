@@ -5,25 +5,19 @@ import java.util.ArrayList;
 public class SenderSW extends Thread{
     ArrayList<Frame> frames = new ArrayList<Frame>(); //quadros que serão enviados
     int lastFrameCode;
-    Boolean wait = false;
-    ReceiverSW receiver;
     PhysicalLayer physicalLayer;
     
      
     public SenderSW(PhysicalLayer physicalLayer){
         this.physicalLayer = physicalLayer;
     }
-    public SenderSW(ReceiverSW receiver, ArrayList<Frame> frames){
-        this.setReceiver(receiver);
+    public SenderSW(ArrayList<Frame> frames){
         this.fromNetworkLayer(frames);
     }
     public void fromNetworkLayer(ArrayList<Frame> frames) { //sets the frame
         this.frames = frames;
     }
-    public void setReceiver(ReceiverSW receiver) {
-        this.receiver = receiver;
-    }
-
+    
     private void toPhysicalLayer() { //envia o quadro para a camada física
         
         Frame buffer = this.frames.get(0); //quadro que será enviado
